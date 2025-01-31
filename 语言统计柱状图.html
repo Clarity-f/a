@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>语言统计柱状图</title>
+    <!-- 引入 ECharts 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+<body style="height: 100%; margin: 0">
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+    <div id="main" style="height: 100%"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 使用刚指定的配置项和数据显示图表。
+        var option = {
+            title: {
+                text: '语言统计结果'
+            },
+            tooltip: {},
+            legend: {
+                data:['次数']
+            },
+            xAxis: {
+                data: []
+            },
+            yAxis: {},
+            series: [{
+                name: '次数',
+                type: 'bar',
+                data: []
+            }]
+        };
+
+        // 设置选项
+        myChart.setOption(option);
+
+        // 使用fetch从服务器获取数据
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                // 更新xAxis和series数据
+                myChart.setOption({
+                    xAxis: {
+                        data: Object.keys(data)
+                    },
+                    series: [{
+                        data: Object.values(data)
+                    }]
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>
+
+
+
